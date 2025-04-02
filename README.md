@@ -63,10 +63,9 @@ Handles all database operations.
 
 ##  How to Run
 
-1. Make sure you have **Python 3.x** installed.
 2. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/employee-database.git
+   git clone https://github.com/bbzet/Employeedatabase
    cd employee-database
 
 
