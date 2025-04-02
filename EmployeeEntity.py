@@ -1,5 +1,5 @@
 class EmployeeEntity:
-    def __init__(self, id, name, position, salary, hire_date):
+    def __init__(self, id=None, name=None, position=None, salary=None, hire_date=None):
         self._id = id
         self._name = name
         self._position = position
