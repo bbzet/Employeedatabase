@@ -6,6 +6,7 @@ class EmployeeDao:
         self.__conn = sqlite3.connect(database)
         self.__cursor = self.__conn.cursor()
 
+
     def insert(self, employee: EmployeeEntity):
         sql = ''' INSERT INTO employee(name, position, salary, hire_date)
                   VALUES(?,?,?,?)  '''
@@ -17,17 +18,11 @@ class EmployeeDao:
         return id
 
     def get_by_id(self, id):
-        sql = ''' SELECT id, name, position, salary, hire_date
-        FROM employee
-        WHERE id = ?'''
-
-        self.__cursor.execute(sql, (id,))
+        self.__cursor.execute("SELECT * FROM employee WHERE id=?", (id,))
         row = self.__cursor.fetchone()
         if row:
-            employee = EmployeeEntity(id = row[0], name = row[1], position = row[2], salary = row[3], hire_date = row[4])
-        else:
-            return None
-        return employee
+            return EmployeeEntity(*row)
+        return f"We can' find this id {id} "
 
     def get_all(self):
         sql = ''' SELECT * 
@@ -36,29 +31,25 @@ class EmployeeDao:
         self.__cursor.execute(sql)
         rows = self.__cursor.fetchall()
 
-        for row in rows:
-            print(row)
+        return [EmployeeEntity(*rows) for rows in rows]
 
     def update(self, employee: EmployeeEntity):
         sql = ''' UPDATE employee SET name = ?,
         position = ?, salary = ?, hire_date = ?
         WHERE id = ?'''
 
-        self.__cursor.execute(sql, (employee.get_name(), employee.get_position(), employee.get_salary(), employee.get_hire_date(), employee.get_id()))
+        self.__cursor.execute(sql, (employee._name, employee._position, employee._salary, employee._hire_date, employee._id))
         self.__conn.commit()
-        return self.__cursor.rowcount
 
     def delete(self, id):
         sql = ''' DELETE FROM employee WHERE id = ?'''
 
         self.__cursor.execute(sql, (id,))
         self.__conn.commit()
-        return self.__cursor.rowcount
 
     def delete_all(self):
         sql =  ''' DELETE FROM employee'''
 
         self.__cursor.execute(sql)
         self.__conn.commit()
-        return self.__cursor.rowcount
 
